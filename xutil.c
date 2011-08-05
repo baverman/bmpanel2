@@ -57,7 +57,9 @@ static char *atom_names[] = {
 	"ESETROOT_PMAP_ID",
 	"XdndAware",
 	"XdndPosition",
-	"XdndStatus"
+	"XdndStatus",
+	"_NET_WM_STATE_MAXIMIZED_VERT",
+	"_NET_WM_STATE_MAXIMIZED_HORZ"
 };
 
 void *x_get_prop_data(struct x_connection *c, Window win, Atom prop,
@@ -377,14 +379,27 @@ int x_is_window_visible_on_panel(struct x_connection *c, Window win)
 
 	data = x_get_prop_data(c, win, c->atoms[XATOM_NET_WM_STATE], XA_ATOM, &num);
 	if (!data)
-		return 1;
+		return 0;
 
+	int is_h_max = 0;
+	int is_v_max = 0;
+	
 	while (num) {
 		num--;
 		if (data[num] == c->atoms[XATOM_NET_WM_STATE_SKIP_TASKBAR])
 			ret = 0;
+
+		if (data[num] == c->atoms[XATOM_NET_WM_STATE_MAXIMIZED_VERT])
+			is_v_max = 1;
+
+		if (data[num] == c->atoms[XATOM_NET_WM_STATE_MAXIMIZED_HORZ])
+			is_h_max = 1;
 	}
 	XFree(data);
+
+	if ( ret && ( !is_h_max || !is_v_max ) ) {
+		ret = 0;
+	}
 
 	return ret;
 }
