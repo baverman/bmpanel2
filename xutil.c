@@ -28,7 +28,7 @@ static char *atom_names[] = {
 	"_NET_CLOSE_WINDOW",
 	"_NET_WM_NAME",
 	"_NET_WM_NAME",
-	"_NET_WM_VISIBLE_ICON_NAME",
+	"_NET_WM_NAME",
 	"_NET_WORKAREA",
 	"_NET_WM_ICON",
 	"_NET_WM_ICON_GEOMETRY",
